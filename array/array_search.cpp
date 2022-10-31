@@ -7,7 +7,7 @@
 namespace array_search {
     void Test(){
         try {
-            array_search::Runner runner;
+            Runner runner;
             runner.Runnable();
         }catch (std::out_of_range e) {
             std::cout << "单测执行失败" << std::endl;
