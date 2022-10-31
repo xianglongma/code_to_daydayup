@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# cmake目录
+cmake-build-debug
+
+# clion配置目录
+.idea
