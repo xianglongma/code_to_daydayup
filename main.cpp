@@ -1,12 +1,9 @@
-#include <iostream>
+//
+// Created by xianglong on 2022/10/29.
+//
+
 #include "array_search.h"
 int main() {
-    try {
-        array_search::Runner runner;
-        runner.Runnable();
-    }catch (std::out_of_range e) {
-        std::cout << "单测执行失败" << std::endl;
-        std::cout << e.what()<< "下标访问越界" << std::endl;
-    }
+    array_search::Test();
     return 0;
 }

@@ -5,6 +5,15 @@
 #include "array_search.h"
 
 namespace array_search {
+    void Test(){
+        try {
+            array_search::Runner runner;
+            runner.Runnable();
+        }catch (std::out_of_range e) {
+            std::cout << "单测执行失败" << std::endl;
+            std::cout << e.what()<< "下标访问越界" << std::endl;
+        }
+    }
     // 1.暴力搜索 O(n)
     int ViolenceSearch::search(std::vector<int> &nums, int target) {
         // nums.size(), 底层是无符号整形，减一有可能会越界
@@ -64,14 +73,10 @@ namespace array_search {
 
     // 构造跑runner
     Runner::Runner() {
+        this->_problemDescription();
         this->_registerSearch(new ViolenceSearch);
         this->_registerSearch(new OppositeDirectionBinarySearch);
         this->_registerSearch(new ClassicalBinarySearch);
-        for (auto v: this->_searchers) {
-            if (v != nullptr) {
-                std::cout << v->type() << " 初始化成功！" << std::endl;
-            }
-        }
     }
 
     void Runner::_registerSearch(Search *search) {
@@ -79,31 +84,32 @@ namespace array_search {
             this->_searchers.push_back(search);
         }
     }
-    std::vector<std::tuple<std::string, std::vector < int>, int, int>>
+
+    std::vector<std::tuple<std::string, std::vector<int>, int, int>>
 
     Runner::_productCase() {
-        std::vector < std::tuple < std::string, std::vector < int >, int, int >> result;
+        std::vector<std::tuple<std::string, std::vector<int>, int, int >> result;
         // 空数组
-        result.push_back(std::make_tuple("空数组", std::vector < int > {}, 1, -1));
+        result.push_back(std::make_tuple("空数组", std::vector<int>{}, 1, -1));
         // 单个元素
-        result.push_back(std::make_tuple("单个元素", std::vector < int > {1}, 1, 0));
+        result.push_back(std::make_tuple("单个元素", std::vector<int>{1}, 1, 0));
         // 奇数个元素
-        result.push_back(std::make_tuple("奇数个元素", std::vector < int > {-1, 0, 1, 2, 3}, 1, 2));
+        result.push_back(std::make_tuple("奇数个元素", std::vector<int>{-1, 0, 1, 2, 3}, 1, 2));
         // 奇数个元素左边界
-        result.push_back(std::make_tuple("奇数个元素左边界", std::vector < int > {-1, 0, 1, 2, 3}, -1, 0));
+        result.push_back(std::make_tuple("奇数个元素左边界", std::vector<int>{-1, 0, 1, 2, 3}, -1, 0));
         // 奇数个元素右边界
-        result.push_back(std::make_tuple("奇数个元素右边界", std::vector < int > {-1, 0, 1, 2, 3}, 3, 4));
+        result.push_back(std::make_tuple("奇数个元素右边界", std::vector<int>{-1, 0, 1, 2, 3}, 3, 4));
         // 偶数个元素
-        result.push_back(std::make_tuple("偶数个元素", std::vector < int > {-1, 0, 1, 2, 3, 5}, 1, 2));
+        result.push_back(std::make_tuple("偶数个元素", std::vector<int>{-1, 0, 1, 2, 3, 5}, 1, 2));
         // 偶数个元素左边界
-        result.push_back(std::make_tuple("偶数个元素左边界", std::vector < int > {-1, 0, 1, 2, 3, 5}, -1, 0));
+        result.push_back(std::make_tuple("偶数个元素左边界", std::vector<int>{-1, 0, 1, 2, 3, 5}, -1, 0));
         // 偶数个元素右边届
-        result.push_back(std::make_tuple("偶数个元素右边届", std::vector < int > {-1, 0, 1, 2, 3, 5}, 5, 5));
+        result.push_back(std::make_tuple("偶数个元素右边届", std::vector<int>{-1, 0, 1, 2, 3, 5}, 5, 5));
         return result;
     }
 
     void Runner::Runnable() {
-        std::vector < std::tuple < std::string, std::vector < int >, int, int >> cases = this->_productCase();
+        std::vector<std::tuple<std::string, std::vector<int>, int, int >> cases = this->_productCase();
         for (auto r: this->_searchers) {
             if (r == nullptr) {
                 continue;
@@ -124,6 +130,15 @@ namespace array_search {
             }
             std::cout << "所有测试case通过: " << r->type() << std::endl;
         }
+    }
+
+    void Runner::_problemDescription() {
+        std::cout << "题目描述：给定一个 n 个元素有序的（升序）整型数组 nums 和一个目标值 target  ，写一个函数搜索 nums 中的 target，如果目标值存在返回下标，否则返回 -1。"
+                  << std::endl;
+        std::cout << "示例：" << std::endl;
+        std::cout << "输入: nums = [-1,0,3,5,9,12], target = 9     " << std::endl;
+        std::cout << "输出: 4      " << std::endl;
+        std::cout << "解释: 9 出现在 nums 中并且下标为 4\n" << std::endl;
     }
 
     Runner::~Runner() {

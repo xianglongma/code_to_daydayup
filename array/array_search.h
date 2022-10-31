@@ -10,8 +10,8 @@
 #include <map>
 #include <iostream>
 #include <tuple>
-// 给定一个 n 个元素有序的（升序）整型数组 nums 和一个目标值 target  ，写一个函数搜索 nums 中的 target，如果目标值存在返回下标，否则返回 -1。
 namespace array_search {
+    void Test();
     class Search {
     public:
         virtual int search(std::vector<int> &nums, int target) = 0;
@@ -54,6 +54,8 @@ namespace array_search {
         ~Runner();
 
     private:
+        // 题目描述
+        void _problemDescription();
         // 注册searcher
         void _registerSearch(Search *search);
 
