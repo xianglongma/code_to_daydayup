@@ -64,19 +64,24 @@ namespace array_search {
 
     // 构造跑runner
     Runner::Runner() {
-        this->_runners.push_back(new ViolenceSearch);
-        this->_runners.push_back(new OppositeDirectionBinarySearch);
-        this->_runners.push_back(new ClassicalBinarySearch);
-        for (auto v: this->_runners) {
+        this->_registerSearch(new ViolenceSearch);
+        this->_registerSearch(new OppositeDirectionBinarySearch);
+        this->_registerSearch(new ClassicalBinarySearch);
+        for (auto v: this->_searchers) {
             if (v != nullptr) {
                 std::cout << v->type() << " 初始化成功！" << std::endl;
             }
         }
     }
 
+    void Runner::_registerSearch(Search *search) {
+        if (search != nullptr) {
+            this->_searchers.push_back(search);
+        }
+    }
     std::vector<std::tuple<std::string, std::vector < int>, int, int>>
 
-    Runner::ProductCase() {
+    Runner::_productCase() {
         std::vector < std::tuple < std::string, std::vector < int >, int, int >> result;
         // 空数组
         result.push_back(std::make_tuple("空数组", std::vector < int > {}, 1, -1));
@@ -98,8 +103,8 @@ namespace array_search {
     }
 
     void Runner::Runnable() {
-        std::vector < std::tuple < std::string, std::vector < int >, int, int >> cases = this->ProductCase();
-        for (auto r: this->_runners) {
+        std::vector < std::tuple < std::string, std::vector < int >, int, int >> cases = this->_productCase();
+        for (auto r: this->_searchers) {
             if (r == nullptr) {
                 continue;
             }
@@ -109,9 +114,11 @@ namespace array_search {
                 int target, result;
                 std::tie(case_type, element, target, result) = v;
                 if (result != r->search(element, target)) {
+                    std::cout << "---------------------------------" << std::endl;
                     std::cout << "单测失败" << std::endl;
                     std::cout << "算法类型:" << r->type() << std::endl;
                     std::cout << "测试case:" << case_type << std::endl;
+                    std::cout << "---------------------------------" << std::endl;
                     return;
                 }
             }
@@ -120,15 +127,15 @@ namespace array_search {
     }
 
     Runner::~Runner() {
-        for (auto v: this->_runners) {
+        for (auto v: this->_searchers) {
             if (v != nullptr) {
                 delete v;
                 v = nullptr;
             }
         }
-        this->_runners.clear(); // clear  this->_runners.size() 为零 但是this->_runners.capacity()不为零；空间并未完全释放
-        // std::cout << "size:" << this->_runners.size() << " capacity:" << this->_runners.capacity() << std::endl;
-        std::vector<Search *>().swap(this->_runners);
-        // std::cout << "size:" << this->_runners.size() << " capacity:" << this->_runners.capacity() << std::endl;
+        this->_searchers.clear(); // clear  this->_searchers.size() 为零 但是this->_searchers.capacity()不为零；空间并未完全释放
+        // std::cout << "size:" << this->_searchers.size() << " capacity:" << this->_searchers.capacity() << std::endl;
+        std::vector<Search *>().swap(this->_searchers);
+        // std::cout << "size:" << this->_searchers.size() << " capacity:" << this->_searchers.capacity() << std::endl;
     }
 } // namespace array_search

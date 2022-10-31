@@ -50,14 +50,18 @@ namespace array_search {
 
         // 执行测试
         void Runnable();
+
         ~Runner();
 
     private:
+        // 注册searcher
+        void _registerSearch(Search *search);
+
         // 测试 case 生成, case 类型 --> case --> 预期结果
-        std::vector<std::tuple<std::string, std::vector<int>, int, int>> ProductCase();
+        std::vector<std::tuple<std::string, std::vector<int>, int, int>> _productCase();
 
         // 不同实现方式
-        std::vector<Search *> _runners;
+        std::vector<Search *> _searchers;
     };
 } // namespace array_search
 
